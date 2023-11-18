@@ -1,6 +1,9 @@
 # React + TypeScript + Vite
-- [ ] Inicializar proyecto con Vite
+- [ X ] Inicializar proyecto con Vite
 - [ ] Añadir linter para TypeScript + React
+```
+    npx eslint --init
+```
 - [ ] Añadir estilos a la App
 - [ ] Listar los items
 - [ ] Poder borrar los items
