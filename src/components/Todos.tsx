@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { type ListOfTodos, type TodoId, type Todo as TodoType } from '../types'
 import TodoItem from './TodoItem'
+import { useTodos } from '../hooks/useTodos'
 
 interface Props {
   todos: ListOfTodos
@@ -8,6 +9,8 @@ interface Props {
   onRemoveTodo: ({ id }: TodoId) => void
   onCompleted: ({ id, completed }: Pick<TodoType, 'id' | 'completed'>) => void
 }
+const {todos} = useTodos()
+console.log(todos)
 
 export const Todos: React.FC<Props> = ({ todos, onRemoveTodo, onCompleted, setTitle }) => {
   const [isEditing, setIsEditing] = useState<string>('')

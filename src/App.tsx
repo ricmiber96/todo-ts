@@ -4,6 +4,7 @@ import { type TodoTitle, type FilterValue, type TodoId, type Todo as TodoType, t
 import { TODO_FILTERS } from './consts'
 import Footer from './components/Footer'
 import Header from './components/Header'
+import { useTodos } from './hooks/useTodos'
 
 const mockTodos = [
   {
@@ -24,7 +25,8 @@ const mockTodos = [
 ]
 
 const App = (): JSX.Element => {
-  const [todos, setTodos] = useState<ListOfTodos>(mockTodos)
+
+  const [todos, setTodos] = useState<ListOfTodos>(mockTodos) 
   const [filterSelected, setFilterSelected] = useState<FilterValue>(() => {
     // Avoid page refresh and keep the filter selected
     const params = new URLSearchParams(window.location.search)
