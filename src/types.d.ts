@@ -1,4 +1,4 @@
-import { type TODO_FILTERS } from './consts'
+import { TODO_ACTION_TYPES, type TODO_FILTERS } from './consts'
 
 export interface Todo {
   id: `${string}-${string}-${string}-${string}-${string}`
@@ -12,3 +12,4 @@ export type TodoCompleted = Pick<Todo, 'completed'>
 
 export type ListOfTodos = Todo[]
 export type FilterValue = typeof TODO_FILTERS[keyof typeof TODO_FILTERS]
+export type TodoActionType = typeof TODO_ACTION_TYPES[keyof typeof TODO_ACTION_TYPES]

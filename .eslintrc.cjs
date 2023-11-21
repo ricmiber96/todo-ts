@@ -22,7 +22,7 @@ module.exports = {
     "rules": {
         "react/react-in-jsx-scope": "off",
           // allow jsx syntax in js files (for next.js project)
-          "quotes": [2, "single", { "avoidEscape": true }],
+          "quotes": [4, "single", { "avoidEscape": true }],
           // "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
           "jsx-quotes": ["error", "prefer-single"],
           "indent": ["error", 2],
