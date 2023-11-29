@@ -9,15 +9,14 @@ interface Props {
   onRemoveTodo: ({ id }: TodoId) => void
   onCompleted: ({ id, completed }: Pick<TodoType, 'id' | 'completed'>) => void
 }
-const {todos} = useTodos()
-console.log(todos)
 
 export const Todos: React.FC<Props> = ({ todos, onRemoveTodo, onCompleted, setTitle }) => {
   const [isEditing, setIsEditing] = useState<string>('')
+  const { state } = useTodos()
 
   return (
     <ul className='todo-list'>
-      {todos.map((todo) => (
+      {state.todos.map((todo) => (
         <li
           key={todo.id}
           className={`${todo.completed ? 'completed' : ''} ${isEditing === todo.id ? 'editing' : ''}`}

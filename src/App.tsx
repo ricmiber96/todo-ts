@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import Todos from './components/Todos'
-import { type TodoTitle, type FilterValue, type TodoId, type Todo as TodoType, type ListOfTodos } from './types'
-import { TODO_FILTERS } from './consts'
 import Footer from './components/Footer'
 import Header from './components/Header'
-import { useTodos } from './hooks/useTodos'
+import Todos from './components/Todos'
+import { TODO_FILTERS } from './consts'
+import { type FilterValue, type ListOfTodos, type TodoId, type TodoTitle, type Todo as TodoType } from './types'
+import { TodoProvider } from './context/TodoContext'
 
 const mockTodos = [
   {
@@ -25,8 +25,7 @@ const mockTodos = [
 ]
 
 const App = (): JSX.Element => {
-
-  const [todos, setTodos] = useState<ListOfTodos>(mockTodos) 
+  const [todos, setTodos] = useState<ListOfTodos>(mockTodos)
   const [filterSelected, setFilterSelected] = useState<FilterValue>(() => {
     // Avoid page refresh and keep the filter selected
     const params = new URLSearchParams(window.location.search)
@@ -89,20 +88,22 @@ const App = (): JSX.Element => {
   }
 
   return (
-    <div className='todoapp'>
-      <Header onAddTodo={handleAddTodo} />
-      <Todos
-        setTitle= {handleUpdateTodo}
-        todos={filteredTodos}
-        onCompleted={handleCompleted}
-        onRemoveTodo={handleRemove} />
-      <Footer
-        activeCount={activeCount}
-        completedCount={completedCount}
-        onClearCompleted={handleRemoveAllCompleted}
-        filterSelected={filterSelected}
-        handleFilterChange={handleFilterChange}/>
-    </div>
+    <TodoProvider>
+      <div className='todoapp'>
+        <Header onAddTodo={handleAddTodo} />
+        <Todos
+          setTitle= {handleUpdateTodo}
+          todos={filteredTodos}
+          onCompleted={handleCompleted}
+          onRemoveTodo={handleRemove} />
+        <Footer
+          activeCount={activeCount}
+          completedCount={completedCount}
+          onClearCompleted={handleRemoveAllCompleted}
+          filterSelected={filterSelected}
+          handleFilterChange={handleFilterChange}/>
+      </div>
+    </TodoProvider>
   )
 }
 
