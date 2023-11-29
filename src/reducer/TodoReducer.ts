@@ -18,14 +18,14 @@ export type TodoAction =
   | { type: 'FILTER_CHANGE', payload: { filter: FilterValue } }
   | { type: 'REMOVE_TODO', payload: { id: string } }
   | { type: 'ADD_TODO', payload: { title: string } }
-  | { type: 'UPDATE_TITLE', payload: { id: string, title: string } }
+  | { type: 'UPDATE_TODO', payload: { id: string, title: string, completed: boolean } }
 
 export interface TodoContextType {
   state: TodoState
   handleCompleted: (id: string, completed: boolean) => void
-  handleRemove: (id: string) => void
+  handleRemoveTodo: (id: string) => void
   handleAddTodo: (title: string) => void
-  handleUpdateTodo: (id: string, title: string) => void
+  handleUpdateTodo: (id: string, title: string, completed: boolean) => void
   handleClearCompleted: () => void
   handleFilterChange: (filter: FilterValue) => void
 
@@ -87,12 +87,12 @@ export const todoReducer = (state: TodoState, action: TodoAction): TodoState => 
         todos: [...state.todos, newTodo]
       }
     }
-    case 'UPDATE_TITLE':{
-      const { id, title } = action.payload
+    case 'UPDATE_TODO':{
+      const { id, title, completed } = action.payload
       return {
         ...state,
         todos: state.todos.map(todo => {
-          return todo.id === id ? { ...todo, title } : todo
+          return todo.id === id ? { ...todo, title, completed } : todo
         })
       }
     }

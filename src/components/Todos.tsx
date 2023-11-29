@@ -1,22 +1,31 @@
-import React, { useState } from 'react'
-import { type ListOfTodos, type TodoId, type Todo as TodoType } from '../types'
-import TodoItem from './TodoItem'
+import React, { useEffect, useState } from 'react'
+import { TODO_FILTERS } from '../consts'
 import { useTodos } from '../hooks/useTodos'
+import { type ListOfTodos, type Todo as TodoType } from '../types'
+import TodoItem from './TodoItem'
 
 interface Props {
-  todos: ListOfTodos
-  setTitle: (params: Omit<TodoType, 'completed'>) => void
-  onRemoveTodo: ({ id }: TodoId) => void
   onCompleted: ({ id, completed }: Pick<TodoType, 'id' | 'completed'>) => void
 }
 
-export const Todos: React.FC<Props> = ({ todos, onRemoveTodo, onCompleted, setTitle }) => {
+export const Todos: React.FC<Props> = ({ onCompleted }) => {
   const [isEditing, setIsEditing] = useState<string>('')
+  const [todos, setTodos] = useState<ListOfTodos>([])
   const { state } = useTodos()
+
+  useEffect(() => {
+    const { todos } = state
+    const filteredTodos = todos.filter((todo) => {
+      if (state.filterSelected === TODO_FILTERS.ACTIVE) return !todo.completed
+      if (state.filterSelected === TODO_FILTERS.COMPLETED) return todo.completed
+      return todo
+    })
+    setTodos(filteredTodos)
+  }, [state])
 
   return (
     <ul className='todo-list'>
-      {state.todos.map((todo) => (
+      {todos.map((todo) => (
         <li
           key={todo.id}
           className={`${todo.completed ? 'completed' : ''} ${isEditing === todo.id ? 'editing' : ''}`}
@@ -27,11 +36,9 @@ export const Todos: React.FC<Props> = ({ todos, onRemoveTodo, onCompleted, setTi
             id = {todo.id}
             title = {todo.title}
             completed = {todo.completed}
-            setTitle={setTitle}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
-            onToggleCompleted={onCompleted}
-            onRemoveTodo={onRemoveTodo} />
+            onToggleCompleted={onCompleted} />
         </li>
       ))}
     </ul>

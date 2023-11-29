@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { type TodoId, type Todo as TodoType } from '../types'
+import { useTodos } from '../hooks/useTodos'
+import { type Todo as TodoType } from '../types'
 
 interface Props extends TodoType {
-  onRemoveTodo: ({ id }: TodoId) => void
   onToggleCompleted: ({ id, completed }: Pick<TodoType, 'id' | 'completed'>) => void
-  setTitle: (params: Omit<TodoType, 'completed'>) => void
   isEditing: string
   setIsEditing: (completed: string) => void
 }
 
-export const TodoItem: React.FC<Props> = ({ id, title, completed, setTitle, isEditing, setIsEditing, onToggleCompleted, onRemoveTodo }) => {
+export const TodoItem: React.FC<Props> = ({ id, title, completed, isEditing, setIsEditing }) => {
   const [editedTitle, setEditedTitle] = useState(title)
   const inputEdit = useRef<HTMLInputElement>(null)
+
+  const { handleRemoveTodo, handleUpdateTodo } = useTodos()
 
   useEffect(() => {
     inputEdit.current?.focus()
@@ -21,10 +22,12 @@ export const TodoItem: React.FC<Props> = ({ id, title, completed, setTitle, isEd
     if (e.key === 'Enter') {
       setEditedTitle(editedTitle.trim())
       if (editedTitle !== title) {
-        setTitle({ id, title: editedTitle })
+        handleUpdateTodo(id, editedTitle, completed)
       }
-      if (editedTitle === '') onRemoveTodo({ id })
-      setIsEditing('')
+      if (editedTitle === '') {
+        handleRemoveTodo(id)
+        setIsEditing('')
+      }
     }
     if (e.key === 'Escape') {
       setEditedTitle(title)
@@ -40,11 +43,11 @@ export const TodoItem: React.FC<Props> = ({ id, title, completed, setTitle, isEd
           type='checkbox'
           checked={completed}
           onChange={(e) => {
-            onToggleCompleted({ id, completed: e.target.checked })
+            handleUpdateTodo(id, title, e.target.checked)
           }} />
         <label className='todo-title'>{title}</label>
         <button
-          onClick={() => { onRemoveTodo({ id }) }}
+          onClick={() => { handleRemoveTodo(id) }}
           className='destroy'></button>
       </div>
       <input

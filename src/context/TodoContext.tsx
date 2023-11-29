@@ -7,7 +7,7 @@ export interface TodoContextProps {
   filterSelected: FilterValue
   handleCompleted: (id: string, completed: boolean) => void
   handleRemove: (id: string) => void
-  handleUpdateTodo: (id: string, title: string) => void
+  handleUpdateTodo: (id: string, title: string, completed: boolean) => void
   handleClearCompleted: () => void
   handleFilterChange: (filter: FilterValue) => void
 
@@ -22,7 +22,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     dispatch({ type: 'COMPLETED_TODO', payload: { id, completed } })
   }
 
-  const handleRemove = (id: string): void => {
+  const handleRemoveTodo = (id: string): void => {
     dispatch({ type: 'REMOVE_TODO', payload: { id } })
   }
 
@@ -30,8 +30,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     dispatch({ type: 'ADD_TODO', payload: { title } })
   }
 
-  const handleUpdateTodo = (id: string, title: string): void => {
-    dispatch({ type: 'UPDATE_TITLE', payload: { id, title } })
+  const handleUpdateTodo = (id: string, title: string, completed: boolean): void => {
+    dispatch({ type: 'UPDATE_TODO', payload: { id, title, completed } })
   }
 
   const handleClearCompleted = (): void => {
@@ -48,7 +48,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const contextValue: TodoContextType = {
     state,
     handleCompleted,
-    handleRemove,
+    handleRemoveTodo,
     handleAddTodo,
     handleUpdateTodo,
     handleClearCompleted,

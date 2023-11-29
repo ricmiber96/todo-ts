@@ -1,17 +1,15 @@
 import React from 'react'
 import { FILTERS_BUTTONS } from '../consts'
+import { useTodos } from '../hooks/useTodos'
 import { type FilterValue } from '../types'
 
-interface Props {
-  // TODO: Define the component props
-  filterSelected: FilterValue
-  onFilterChange: (filter: FilterValue) => void
-}
+export const Filters: React.FC = () => {
+  const { state, handleFilterChange } = useTodos()
+  const { filterSelected } = state
 
-export const Filters: React.FC<Props> = ({ filterSelected, onFilterChange }) => {
   const handleClick = (filter: FilterValue) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
-    onFilterChange(filter)
+    handleFilterChange(filter)
     history.pushState(null, '', FILTERS_BUTTONS[filter].href)
   }
 
